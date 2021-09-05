@@ -3,6 +3,7 @@ import {AppProps} from "next/app";
 import React from 'react';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { theme } from '../styles/theme';
+import { SideBar } from '../containers/SideBar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   React.useEffect(() => {
@@ -12,10 +13,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       jssStyles.parentElement!.removeChild(jssStyles);
     }
   }, []);
-  
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <SideBar />
       <Component {...pageProps} />
     </ThemeProvider>
   )
