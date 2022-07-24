@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import TrendingUp from '@mui/icons-material/TrendingUp';
 import Text from 'src/components/Text';
-import { Chart } from 'src/components/Chart';
+import { Chart, ChartProperty } from 'src/components/Chart';
 import type { ApexOptions } from 'apexcharts';
 
 const AvatarSuccess = styled(Avatar)(
@@ -55,7 +55,11 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 `
 );
 
-function AccountBalance() {
+interface Props {
+	chartProperties: ChartProperty[]
+}
+
+const AccountBalance = ({chartProperties}: Props) => {
   const theme = useTheme();
 
   const chartOptions: ApexOptions = {
@@ -73,11 +77,11 @@ function AccountBalance() {
         }
       }
     },
-    colors: ['#ff9900', '#1c81c2', '#333', '#5c6ac0'],
+    colors: chartProperties.map((c: ChartProperty) => c.color),
     dataLabels: {
       enabled: true,
-      formatter: function (val) {
-        return val + '%';
+      formatter: (val: number) => {
+        return Math.round(val) + '%';
       },
       style: {
         colors: [theme.colors.alpha.trueWhite[100]]
@@ -110,7 +114,7 @@ function AccountBalance() {
     fill: {
       opacity: 1
     },
-    labels: ['Bitcoin', 'Ripple', 'Cardano', 'Ethereum'],
+    labels: chartProperties.map((c: ChartProperty) => c.label),
     legend: {
       labels: {
         colors: theme.colors.alpha.trueWhite[100]
@@ -125,12 +129,12 @@ function AccountBalance() {
     }
   };
 
-  const chartSeries = [10, 20, 25, 45];
+  const chartSeries = chartProperties.map((c: ChartProperty) => Math.round(c.time / 24 * 100));
 
   return (
     <Card>
       <Grid spacing={0} container>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Box p={4}>
             <Typography
               sx={{
@@ -174,7 +178,7 @@ function AccountBalance() {
                 </Box>
               </Box>
             </Box>
-            <Grid container spacing={3}>
+            {/* <Grid container spacing={3}>
               <Grid sm item>
                 <Button fullWidth variant="outlined">
                   Send
@@ -185,18 +189,19 @@ function AccountBalance() {
                   Receive
                 </Button>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
         </Grid>
         <Grid
           sx={{
-            position: 'relative'
+            position: 'relative',
+						flexGrow: 1
           }}
           display="flex"
           alignItems="center"
           item
           xs={12}
-          md={6}
+          md={8}
         >
           <Box
             component="span"
@@ -230,98 +235,31 @@ function AccountBalance() {
                     width: '100%'
                   }}
                 >
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="BTC"
-                        src="/static/images/placeholders/logo/bitcoin.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="BTC"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary="Bitcoin"
-                      secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
-                      }}
-                    />
-                    <Box>
-                      <Typography align="right" variant="h4" noWrap>
-                        20%
-                      </Typography>
-                      <Text color="success">+2.54%</Text>
-                    </Box>
-                  </ListItem>
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="XRP"
-                        src="/static/images/placeholders/logo/ripple.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="XRP"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary="Ripple"
-                      secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
-                      }}
-                    />
-                    <Box>
-                      <Typography align="right" variant="h4" noWrap>
-                        10%
-                      </Typography>
-                      <Text color="error">-1.22%</Text>
-                    </Box>
-                  </ListItem>
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="ADA"
-                        src="/static/images/placeholders/logo/cardano.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="ADA"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary="Cardano"
-                      secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
-                      }}
-                    />
-                    <Box>
-                      <Typography align="right" variant="h4" noWrap>
-                        40%
-                      </Typography>
-                      <Text color="success">+10.50%</Text>
-                    </Box>
-                  </ListItem>
-                  <ListItem disableGutters>
-                    <ListItemAvatarWrapper>
-                      <img
-                        alt="ETH"
-                        src="/static/images/placeholders/logo/ethereum.png"
-                      />
-                    </ListItemAvatarWrapper>
-                    <ListItemText
-                      primary="ETH"
-                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary="Ethereum"
-                      secondaryTypographyProps={{
-                        variant: 'subtitle2',
-                        noWrap: true
-                      }}
-                    />
-                    <Box>
-                      <Typography align="right" variant="h4" noWrap>
-                        30%
-                      </Typography>
-                      <Text color="error">-12.38%</Text>
-                    </Box>
-                  </ListItem>
+									{chartProperties.map((c: ChartProperty, i: number) =>
+										<ListItem disableGutters key={i}>
+	                    {/* <ListItemAvatarWrapper>
+	                      <img
+	                        alt="BTC"
+	                        src="/static/images/placeholders/logo/bitcoin.png"
+	                      />
+	                    </ListItemAvatarWrapper> */}
+	                    <ListItemText
+	                      primary={c.label}
+	                      primaryTypographyProps={{ variant: 'h5', noWrap: true }}
+	                      secondary={c.time + 'hours'}
+	                      secondaryTypographyProps={{
+	                        variant: 'subtitle2',
+	                        noWrap: true
+	                      }}
+	                    />
+	                    <Box>
+	                      <Typography align="right" variant="h4" noWrap>
+	                        {Math.round(c.time / 24 * 100) + '%'}
+	                      </Typography>
+	                      {/* <Text color="success">+2.54%</Text> */}
+	                    </Box>
+	                  </ListItem>
+									)}
                 </List>
               </Grid>
             </Grid>
