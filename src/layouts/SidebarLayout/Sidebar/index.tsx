@@ -80,7 +80,7 @@ function Sidebar() {
         />
         <Box p={2}>
           <Button
-            href="https://bloomui.com"
+            href="http://localhost:3000"
             target="_blank"
             rel="noopener noreferrer"
             variant="contained"
