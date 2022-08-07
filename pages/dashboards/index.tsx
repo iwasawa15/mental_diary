@@ -13,7 +13,7 @@ import AccountSecurity from '@/content/Dashboards/Crypto/AccountSecurity';
 import WatchList from '@/content/Dashboards/Crypto/WatchList';
 import { ChartProperty } from '@/components/Chart';
 
-function Dashboard() {
+const Dashboard = () => {
 	const chartProperties: ChartProperty[] = [
 		{
 			label: '睡眠',
@@ -64,7 +64,7 @@ function Dashboard() {
   return (
     <>
       <Head>
-        <title>Crypto Dashboard</title>
+        <title>Dashboard</title>
       </Head>
       <PageTitleWrapper>
         <PageHeader />
