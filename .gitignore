@@ -16,3 +16,6 @@ yarn-error.log*
 
 # Next.js
 /.next
+
+# firebase
+/firebase-service-account-credencials.json

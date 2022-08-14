@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import axios from 'axios';
 
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import {
@@ -40,17 +41,18 @@ const initialForm: Form = {
 // コメント
 
 const Forms = () => {
-
+	const today = new Date()
+	const date = today.getFullYear() + "-" +  (today.getMonth() + 1) + "-"+ today.getDate()
   const [FormInput, setFormInput] = useState<Form>(initialForm);
 
 	const handleInput = (name: string, value: string | number) => {
     setFormInput({ ...FormInput, [name]: value });
   };
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = useCallback(async (e: FormEvent) => {
 		e.preventDefault()
-		console.log(FormInput)
-	}
+		await axios.post('/api/diaries', { user: 'iwasawa', date: date, diary: FormInput })
+	},[FormInput])
 
   return (
     <>
